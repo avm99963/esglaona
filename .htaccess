@@ -1,0 +1,5 @@
+RewriteEngine on
+RewriteRule ^home$ home.php [NC,L]
+RewriteRule ^tournament/([0-9]+)$ tournament.php?id=$1 [NC,L]
+RewriteRule ^schedule/([0-9]+)$ schedule_participant.php?id=$1 [NC,L]
+
