@@ -1,14 +1,18 @@
 <?php
 class api {
   private static function request($url, $method="GET", $params="") {
-    // @TODO: Implement POST support
     if ($method == "GET") {
       $response = file_get_contents($url);
     } else {
       $ch = curl_init();
 
       curl_setopt($ch, CURLOPT_URL, $url);
-      curl_setopt($ch, CURLOPT_POST, 1);
+      if ($method == "POST") {
+        curl_setopt($ch, CURLOPT_POST, 1);
+      } elseif ($method == "PUT") {
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "PUT");
+      }
+
       curl_setopt($ch, CURLOPT_POSTFIELDS, $params); // $params = "adria=1&vilanova=0"
 
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -67,5 +71,11 @@ class api {
     $tournamentid = $match["match"]["tournament_id"];
 
     return self::request(self::API_URL."tournaments/".urlencode($tournamentid)."/matches/".urlencode($matchid)."/attachments.json?api_key=".urlencode($conf["challonge"]["apiKey"]), "POST", "api_key=".urlencode($conf["challonge"]["apiKey"])."&match_attachment[url]=".urlencode($conf["pathForChallonge"]."match.php?id=".$matchid));
+  }
+
+  public static function uploadResults($match, $tournament, $scores, $winner) {
+    global $conf;
+
+    return self::request(self::API_URL."tournaments/".urlencode($tournament)."/matches/".urlencode($match).".json?api_key=".urlencode($conf["challonge"]["apiKey"]), "PUT", "api_key=".urlencode($conf["challonge"]["apiKey"])."&match[scores_csv]=".urlencode($scores[0]."-".$scores[1])."&match[winner_id]=".urlencode($winner));
   }
 }

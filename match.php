@@ -28,6 +28,9 @@ $jutges = matches::getDBJutges($match["id"]);
     <h3>Informació sobre la partida</h3>
     <p><b>Data:</b> <?=date("D d/m/Y H:i", $match["schedule"])?></p>
     <?php
+    if (!empty($match["winner"])) {
+      echo "<p><b>Guanyador de la partida:</b> ".$participants[$match["player".$match["winner"]]]."</p>";
+    }
     if (!count($jutges)) {
       echo "<p><b>Jutges:</b> de moment no hi ha cap jutge inscrit</p>";
     } else {
@@ -40,6 +43,19 @@ $jutges = matches::getDBJutges($match["id"]);
         }
         ?>
       </ul>
+      <?php
+    }
+
+    $matrius = matches::getDBMatrixs($match["id"]);
+
+    if (count($matrius)) {
+      ?>
+      <h3>Matrius</h3>
+      <?php
+      foreach ($matrius as $matriu) {
+        echo "<pre>".$matriu["matrix"]."</pre><p><b>Guanyador:</b> ".$participants[$match["player".$matriu["winner"]]]."</p>";
+      }
+      ?>
       <?php
     }
     ?>

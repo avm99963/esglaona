@@ -90,4 +90,22 @@ class db {
 
     return mysqli_query($con, "UPDATE matches SET schedule = ".$schedule." WHERE id = ".$id);
   }
+
+  public static function addMatrix($match, $matrix, $winner) {
+    global $con;
+
+    $matrix = self::escape($matrix);
+    $winner = (int)$winner;
+
+    return mysqli_query($con, "INSERT INTO matrixs (internalmatch, matrix, winner) VALUES (".(int)$match.", '".$matrix."', ".$winner.")");
+  }
+
+  public static function updateResults($match, $winner) {
+    global $con;
+
+    $match = (int)$match;
+    $winner = (int)$winner;
+
+    return mysqli_query($con, "UPDATE matches SET winner = ".$winner.", status = 4 WHERE id = ".$match." LIMIT 1");
+  }
 }

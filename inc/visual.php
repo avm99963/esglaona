@@ -13,7 +13,7 @@ class visual {
       }
     }
 
-    echo "<p>".implode(" > ", $links)." <span style='float: right;'><a href='logout.php'>Sign out</a></span></p><hr>";
+    echo "<p>".implode(" > ", $links)." <span style='float: right;'><a href='logout.php'>Tanca la sessió</a></span></p><hr>";
   }
 
   public static function url($normal, $cool="") {
@@ -22,7 +22,7 @@ class visual {
     if ($cool == "") {
       $cool = $normal;
     }
-    
+
     return $conf["path"].($conf["coolURLs"] ? $normal : $cool);
   }
 
@@ -39,7 +39,7 @@ class visual {
       return;
     }
 
-    foreach ($array as $msg) { 
+    foreach ($array as $msg) {
       if ($msg[0] == $_GET["msg"]) {
         echo "<p style='color: ".self::$colors[$msg[2]]."'>".$msg[1]."</p>";
       }

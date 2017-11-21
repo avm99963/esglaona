@@ -47,7 +47,7 @@ if ($tournament === false) {
                 <td><?=$participants[$m["player2"]]?></td>
                 <td><?=date("D d/m/Y H:i", $m["schedule"])?></td>
                 <td><?=implode(", ", $jutges)?></td>
-                <td><a href='modifymatch.php?id=<?=$m["id"]?>'>Canvia la data</a><?php if (security::userType() <= security::JUDGE) { ?> | <?=(in_array($_SESSION["id"], array_keys($jutges)) ?  "<a href='apply.php?doit=0&match=".$m["id"]."'>Vull deixar de ser jutge</a> | <a href='jutge.php?match=".$m["id"]."'>Jutja</a>" : "<a href='apply.php?doit=1&match=".$m["id"]."'>Vull ser jutge</a>")?><?php } ?></td>
+                <td><a href='modifymatch.php?id=<?=$m["id"]?>'>Canvia la data</a><?php if (security::userType() <= security::JUDGE) { ?> | <?=(in_array($_SESSION["id"], array_keys($jutges)) ?  "<a href='apply.php?doit=0&match=".$m["id"]."'>Vull deixar de ser jutge</a> | <a href='judge.php?match=".$m["id"]."'>Jutja</a>" : "<a href='apply.php?doit=1&match=".$m["id"]."'>Vull ser jutge</a>")?><?php } ?></td>
               </tr>
             <?php
           }
@@ -59,6 +59,9 @@ if ($tournament === false) {
       echo "<p>No hi ha cap partida programada encara.</p>";
     }
     ?>
-    </ul>
+    <h3>Diagrama de Challonge</h3>
+    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%;">
+      <img src="<?=visual::url("challongesvg.php?codename=".$tournament["codename"])?>">
+    </div>
   </body>
 </html>

@@ -46,4 +46,42 @@ class matches {
 
     return $jutges;
   }
+
+  public static function getDBMatrixs($match) {
+    global $con;
+
+    $query = mysqli_query($con, "SELECT * FROM matrixs WHERE internalmatch = ".(int)$match);
+
+    $matrixs = [];
+
+    while ($row = mysqli_fetch_assoc($query)) {
+      $matrixs[] = $row;
+    }
+
+    return $matrixs;
+  }
+
+  public static function doFinish($match, $tournament) {
+    $matrixs = self::getDBMatrixs($match["id"]);
+    $scores = [0, 0];
+    foreach ($matrixs as $matrix) {
+      $scores[$matrix["winner"] - 1]++;
+    }
+
+    if ($scores[0] == $scores[1]) {
+      return -1;
+    }
+
+    $winner = $match["player".($scores[0] > $scores[1] ? "1" : "2")];
+
+    if (!api::uploadResults($match["challongeid"], $tournament, $scores, $winner)) {
+      return -2;
+    }
+
+    if (!db::updateResults($match["id"], ($scores[0] > $scores[1] ? 1 : 2))) {
+      return -3;
+    }
+
+    return 0;
+  }
 }
