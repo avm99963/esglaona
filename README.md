@@ -2,6 +2,7 @@
 Programa en format de pàgina web utilitzat per a organitzar els Campionats d'Esglaonament de Matrius de la FME
 
 ## Com instal·lar el programa
+
 Per utilitzar el programa necessitaràs el següent:
 
 * Un servidor (preferentment Apache) amb:
