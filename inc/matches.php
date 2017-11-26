@@ -21,6 +21,27 @@ class matches {
     return $r;
   }
 
+  public static function getPartialDBMatches($id) {
+    global $con;
+
+    $query1 = mysqli_query($con, "SELECT * FROM matches WHERE tournament = ".(int)$id." AND status <> 4 ORDER BY mround ASC");
+
+    $r = [];
+    $r[0] = [];
+    while ($row = mysqli_fetch_assoc($query1)) {
+      $r[0][] = $row;
+    }
+
+    $query2 = mysqli_query($con, "SELECT * FROM matches WHERE tournament = ".(int)$id." AND status = 4 ORDER BY mround ASC");
+
+    $r[1] = [];
+    while ($row = mysqli_fetch_assoc($query2)) {
+      $r[1][] = $row;
+    }
+
+    return $r;
+  }
+
   public static function getDBMatch($id, $internal=true) {
     global $con;
 

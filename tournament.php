@@ -30,33 +30,36 @@ if ($tournament === false) {
 
     $participants = api::getArrayParticipants($tournament["codename"]);
 
-    $matches = matches::getDBMatches($tournament["id"]);
+    $pmatches = matches::getPartialDBMatches($tournament["id"]);
 
-    if (count($matches)) {
-      ?>
-      <div style="overflow-x: scroll; -webkit-overflow-scrolling: touch; white-space: nowrap;">
-        <table class="wikitable" style="">
-          <tr><th>Ronda</th><th>Jugador 1</th><th>Jugador 2</th><th>Data</th><th>Jutges</th><th></th></tr>
-          <?php
-          foreach ($matches as $m) {
-            $jutges = matches::getDBJutges($m["id"]);
-            ?>
-              <tr>
-                <th><?=($m["mround"] - 1)?></th>
-                <td><?=$participants[$m["player1"]]?></td>
-                <td><?=$participants[$m["player2"]]?></td>
-                <td><?=date("D d/m/Y H:i", $m["schedule"])?></td>
-                <td><?=implode(", ", $jutges)?></td>
-                <td><a href='modifymatch.php?id=<?=$m["id"]?>'>Canvia la data</a><?php if (security::userType() <= security::JUDGE) { ?> | <?=(in_array($_SESSION["id"], array_keys($jutges)) ?  "<a href='apply.php?doit=0&match=".$m["id"]."'>Vull deixar de ser jutge</a> | <a href='judge.php?match=".$m["id"]."'>Jutja</a>" : "<a href='apply.php?doit=1&match=".$m["id"]."'>Vull ser jutge</a>")?><?php } ?></td>
-              </tr>
+    foreach ($pmatches as $i => &$matches) {
+      echo "<h3>".($i == 0 ? "Partits pendents" : "Partits finalitzats")."</h3>";
+      if (count($matches)) {
+        ?>
+        <div style="overflow-x: scroll; -webkit-overflow-scrolling: touch; white-space: nowrap;">
+          <table class="wikitable" style="margin: 0;">
+            <tr><th>Ronda</th><th>Jugador 1</th><th>Jugador 2</th><th>Data</th><th>Jutges</th><th></th></tr>
             <?php
-          }
-          ?>
-        </table>
-      </div>
-      <?php
-    } else {
-      echo "<p>No hi ha cap partida programada encara.</p>";
+            foreach ($matches as $m) {
+              $jutges = matches::getDBJutges($m["id"]);
+              ?>
+                <tr>
+                  <th><?=($m["mround"] - 1)?></th>
+                  <td><?=$participants[$m["player1"]]?></td>
+                  <td><?=$participants[$m["player2"]]?></td>
+                  <td><?=date("D d/m/Y H:i", $m["schedule"])?></td>
+                  <td><?=implode(", ", $jutges)?></td>
+                  <td><a href='modifymatch.php?id=<?=$m["id"]?>'>Canvia la data</a><?php if (security::userType() <= security::JUDGE) { ?> | <?=(in_array($_SESSION["id"], array_keys($jutges)) ?  "<a href='apply.php?doit=0&match=".$m["id"]."'>Vull deixar de ser jutge</a> | <a href='judge.php?match=".$m["id"]."'>Jutja</a>" : "<a href='apply.php?doit=1&match=".$m["id"]."'>Vull ser jutge</a>")?><?php } ?></td>
+                </tr>
+              <?php
+            }
+            ?>
+          </table>
+        </div>
+        <?php
+      } else {
+        echo "<p>No hi ha cap partida programada encara.</p>";
+      }
     }
     ?>
     <h3>Diagrama de Challonge</h3>
