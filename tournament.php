@@ -33,7 +33,7 @@ if ($tournament === false) {
     $pmatches = matches::getPartialDBMatches($tournament["id"]);
 
     foreach ($pmatches as $i => &$matches) {
-      echo "<h3>".($i == 0 ? "Partits pendents" : "Partits finalitzats")."</h3>";
+      echo "<h3>".($i == 0 ? "Partides pendents" : "Partides finalitzades")."</h3>";
       if (count($matches)) {
         ?>
         <div style="overflow-x: scroll; -webkit-overflow-scrolling: touch; white-space: nowrap;">

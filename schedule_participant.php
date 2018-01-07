@@ -13,8 +13,9 @@ $matches = api::getMatches($tournament["codename"]);
 $participants = api::getArrayParticipants($tournament["codename"]);
 
 $options = "<option value=''></option>";
+
 foreach ($matches as $match) {
-  if ($match["match"]["round"] <= $tournament["current_round"] && $match["match"]["state"] != "pending" && !empty($match["match"]["player1_id"]) && !empty($match["match"]["player2_id"])) {
+  if ($match["match"]["round"] <= $tournament["current_round"] && $match["match"]["state"] != "pending" && $match["match"]["state"] != "complete" && !empty($match["match"]["player1_id"]) && !empty($match["match"]["player2_id"])) {
     $options .= "<option value='".$match["match"]["id"]."'>".$participants[$match["match"]["player1_id"]]." vs. ".$participants[$match["match"]["player2_id"]]." (ronda ".($match["match"]["round"] - 1).")</option>";
   }
 }
